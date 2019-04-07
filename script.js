@@ -1,9 +1,6 @@
-// remove get attributes in url
-// print kmh, km...
 
-
-// Redirect to strava Oauth site to get access code
-function authorizePopup() {
+// Redirect to strava Oauth site to get access code. Then redirect back to homepage
+function OauthRedirect() {
     params = {
         'client_id':'32029',
         'redirect':'http://localhost/StravaMap', 
@@ -26,7 +23,13 @@ function delete_cookies(){
     set_cookie("refresh_token", "", 0)
 }
 
-// Get token with and save it 
+// remove cookies and reload
+function disconnect(){
+    delete_cookies()
+    window.location.assign('http://localhost/StravaMap')
+}
+
+// Get token with and save it
 function get_token(code){
     params = {
         'code': code,
@@ -46,7 +49,7 @@ function get_token(code){
     res = post_api('token', params, set_token_cookie, 'https://www.strava.com/oauth/')
 }
 
-// From URL to dict of arguments
+// get arguments as dict from URL
 function get_args(){
     var query = window.location.search.substring(1).split("&")
     var get_attrs = {}
@@ -126,10 +129,11 @@ function post_api(type, params, callback=function(json){}, fullurl='https://www.
     req.send(params)
 }
 
+// Called when we have the user token
 function load_infos(map){
 
-    // Change button Connect to disconnect
-    $("#btnAuthenticate").html("Disconnect").on('click', (e) => {delete_cookies()})
+    // Change button Connect to Disconnect
+    $("#btnAuthenticate").html("Disconnect").on('click', (e) => {disconnect()})
 
     token = get_cookie("access_token")
 
@@ -147,6 +151,8 @@ function load_infos(map){
     get_api('athlete', {"access_token":token}, print_athlete)
 }
 
+// Get activities from Strava, plot them and put into the list 
+// TODO : Need refacto
 function load_activities(id, map){
     access_token = get_cookie("access_token")
     // timestamp in second
@@ -180,6 +186,7 @@ function load_activities(id, map){
 
 }
 
+// list of activities
 function display_list(json){
 
     txt = "<table class='table'>"
@@ -215,38 +222,52 @@ function display_list(json){
     $('.modal-body').html(txt)
 }
 
-function init(){
-
-    $("#btnAuthenticate").on('click', (e) => {
-        authorizePopup()
-    })
-
-    // Load Map
-    var mymap = L.map('mapid').setView([45, 4], 5);
+// Load Map
+function init_map(){
+    var map = L.map('mapid').setView([45, 4], 5);
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
         maxZoom: 18,
         id: 'mapbox.streets',
         accessToken: 'pk.eyJ1IjoiYWxhcnR5IiwiYSI6ImNqcnJuNjVrOTAzOHIzeW5wa3hjeThkbnkifQ.BErXSZMg3xOUBFDB5RvQ7w'
-    }).addTo(mymap);
+    }).addTo(map);
 
+    return map
+}
+
+// What to do onload of page
+function init(){
+
+    //set the btn a function
+    $("#btnAuthenticate").on('click', (e) => {
+        OauthRedirect()
+    })
+
+    map = init_map()
+
+    //when flag 1, can compute infos
+    flag = 0
     access_token = get_cookie('access_token')
+    
     // If no cookie exist
     if (access_token == ""){
         args = get_args()
         if ('code' in args){
             get_token(args['code'])
-            load_infos(mymap)
+            flag = 1
         }else if('access_token' in args){
             console.log('We have the token :' + args)
         }else{
             console.log("Please connect")
         }
     }else{
-        load_infos(mymap)
+        flag = 1
     }
 
 
+    if (flag == 1){
+        load_infos(map)
+    }
 
 }
 
