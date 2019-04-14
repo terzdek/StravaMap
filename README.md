@@ -10,3 +10,9 @@ A simple web app to visualize in a map, all the geolocalised activities you logg
 * Remove get attributes in url
 * Print on list
 * Make list of activities clickable
+* Authentificate with Oauth
+* Cookie handling better
+* Limit of gpx activities
+* Display heatmap
+* Allow user to choose a time period
+* Allow user to select a zone and have the list of activities there

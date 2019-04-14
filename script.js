@@ -141,11 +141,11 @@ function load_infos(map){
         if (json != ""){
             json = JSON.parse(json)
             console.log(json)
+            $('#infos').append(json["firstname"] + " " + json["lastname"])
             $('#infos').append(
-                "ID : " + json["id"] + " / " + "Lastname : " + json["lastname"] + " / " + "Firstname : " + json["firstname"]
-                )
-            $('#infos').append(
-                $('<button/>').addClass('btn btn-outline-primary').text('Load activities').attr('id', 'activities').click(function () { load_activities(json["id"], map) }))
+                $('<button/>').addClass('btn btn-outline-primary').text('Load activities').attr('id', 'activities').click(function () { 
+                    load_activities(json["id"], map)
+                }))
         }
     }
     get_api('athlete', {"access_token":token}, print_athlete)
