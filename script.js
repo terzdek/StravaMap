@@ -3,6 +3,8 @@
 function delete_cookies(){
     set_cookie("access_token", "", 0)
     set_cookie("refresh_token", "", 0)
+    set_cookie("activities", "", 0)
+    set_cookie("user", "", 0)
 }
 
 // remove cookies and reload
@@ -31,35 +33,23 @@ function get_token(code){
     res = post_api('token', params, set_token_cookie, 'https://www.strava.com/oauth/')
 }
 
-// get arguments as dict from URL
-function get_args(){
-    var query = window.location.search.substring(1).split("&")
-    var get_attrs = {}
-    for (i=0; i<query.length; i++){
-        tmp = query[i].split("=")
-        get_attrs[tmp[0]] = tmp[1]
-    }
-    return get_attrs
-}
+// transform a number into a color (with min/max number of range)
+function perc2color(perc,min,max) {
+    var base = (max - min)
 
-// get the needed cookie 
-function get_cookie(cname){
-    var name = cname + "=";
-    var decodedCookie = decodeURIComponent(document.cookie);
-    var ca = decodedCookie.split(';');
-    for(var i = 0; i <ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-        }
+    if (base == 0) { perc = 100 }
+    else {
+        perc = (perc - min) / base * 100
     }
-    return "";
-}
-
-function set_cookie(cname, cvalue, exdays) {
-  var expires = "expires="+ exdays;
-  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    var r, g, b = 0
+    if (perc < 50) {
+        r = 255
+        g = Math.round(5.1 * perc)
+    }
+    else {
+        g = 255
+        r = Math.round(510 - 5.10 * perc)
+    }
+    var h = r * 0x10000 + g * 0x100 + b * 0x1
+    return '#' + ('000000' + h.toString(16)).slice(-6)
 }

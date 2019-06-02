@@ -1,4 +1,4 @@
-// Called when we have the user token
+// From the user token, save/print it infos
 function load_infos(map){
 
     // Change button Connect to Disconnect
@@ -6,53 +6,93 @@ function load_infos(map){
 
     token = get_cookie("access_token")
 
-    print_athlete = function(json){
-        if (json != ""){
-            json = JSON.parse(json)
-            console.log(json)
-            $('#infos').append(json["firstname"] + " " + json["lastname"])
-            $('#infos').append(
-                $('<button/>').addClass('btn btn-outline-primary').text('Load activities').attr('id', 'activities').click(function () { 
-                    load_activities(json["id"], map)
-                }))
-        }
+    save_ath_and_print = function(content){
+        set_cookie("user", content, 100)
+        print_athlete(content)
     }
-    get_api('athlete', {"access_token":token}, print_athlete)
+
+    get_api('athlete', {"access_token":token}, save_ath_and_print)
+
+}
+
+// print in the navbar the information of the user
+function print_athlete(content){
+    if (content != ""){
+        content = JSON.parse(content)
+        console.log(content)
+        $('#infos').append(content["firstname"] + " " + content["lastname"])
+        $('#infos').append(
+            $('<button/>').addClass('btn btn-outline-primary').text('Load activities').attr('id', 'activities').click(function () { 
+                load_activities(content["id"], map)
+            }))
+        load_activities(content["id"], map)
+    }
 }
 
 // Get activities from Strava, plot them and put into the list 
-// TODO : Need refacto
 function load_activities(id, map){
     access_token = get_cookie("access_token")
     // timestamp in second
     now = Date.now() / 1000
     params = {'before':now, 'after':1264365861, 'page':1, 'per_page':200, 'access_token': access_token}
-    print_activities = function(json){
-        if (json != ""){
-            json = JSON.parse(json)
-            for (var i = 0; i < json.length; i++) {
-                polyline = json[i].map.summary_polyline
-                if (polyline != null){
 
-                    var coordinates = L.Polyline.fromEncoded(polyline).getLatLngs();
 
-                    L.polyline(
-                      coordinates,
-                      {
-                          color: 'blue',
-                          weight: 2,
-                          opacity: .7,
-                          lineJoin: 'round'
-                      }
-                    ).addTo(map);
-                }
-            }
-            $('#activities').text('See activities list').unbind('click').attr('data-toggle', 'modal').attr('data-target', '#ModalLong').click(function () { display_list(json) })
-
-        }
+    save_and_display_act = function(json){
+        display_activities(json)
+        set_cookie("activities", json, 100)
     }
-    get_api("athlete/activities", params, print_activities)
+    get_api("athlete/activities", params, display_activities)
 
+}
+
+function display_activities(content){
+    if (content != ""){
+        content = JSON.parse(content)
+        var coordinates_list = []
+        var selected_polyline
+        for (var i = 0; i < content.length; i++) {
+            polyline = content[i].map.summary_polyline
+            p = polyline
+            if (polyline != null){
+                // add each activity to map
+                var coordinates = L.Polyline.fromEncoded(polyline).getLatLngs();
+                coordinates_list.push(coordinates)
+                color = perc2color(i, content.length, 0)
+                console.log(color)
+                L.polyline(
+                  coordinates,
+                  {
+                      color: color,
+                      weight: 4,
+                      opacity: .7,
+                      lineJoin: 'round'
+                  }
+                ).on('click', function(e){
+                    click_poly(e, selected_polyline)
+                    selected_polyline = e
+                }).addTo(map);
+
+            }
+        }
+        // fit the map window to contain all the activities
+        map.fitBounds(coordinates_list)
+        // Display button
+        $('#activities').text('See activities list').unbind('click').attr('data-toggle', 'modal').attr('data-target', '#ModalLong').click(function () { display_list(content) })
+
+    }
+}
+
+function click_poly(e, previous){
+    var layer = e.target
+    layer.setStyle({
+        weight: 4,
+        color: 'red'
+    })
+    if (previous){
+        console.log(e)
+        console.log(previous)
+        previous.target.resetStyle()
+    }
 }
 
 // list of activities
@@ -91,6 +131,7 @@ function display_list(json){
     $('.modal-body').html(txt)
 }
 
+
 // Load Map
 function init_map(){
     var map = L.map('mapid').setView([45, 4], 5);
@@ -113,6 +154,7 @@ function init(){
     })
 
     map = init_map()
+    p = null
 
     //when flag 1, can compute infos
     flag = 0
@@ -120,7 +162,9 @@ function init(){
     
     // If no cookie exist
     if (access_token == ""){
+        console.log("no cookie access token")
         args = get_args()
+        console.log(args)
         if ('code' in args){
             get_token(args['code'])
             flag = 1
@@ -137,6 +181,7 @@ function init(){
     if (flag == 1){
         load_infos(map)
     }
+
 
 }
 
