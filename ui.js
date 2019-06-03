@@ -51,26 +51,27 @@ function display_activities(content){
         var coordinates_list = []
         var selected_polyline
         for (var i = 0; i < content.length; i++) {
-            polyline = content[i].map.summary_polyline
+            var current_activity = content[i]
+            polyline = current_activity.map.summary_polyline
             p = polyline
             if (polyline != null){
                 // add each activity to map
                 var coordinates = L.Polyline.fromEncoded(polyline).getLatLngs();
                 coordinates_list.push(coordinates)
                 color = perc2color(i, content.length, 0)
-                console.log(color)
                 L.polyline(
                   coordinates,
                   {
                       color: color,
                       weight: 4,
                       opacity: .7,
-                      lineJoin: 'round'
+                      lineJoin: 'round',
                   }
                 ).on('click', function(e){
-                    click_poly(e, selected_polyline)
+                    onclick_poly(e, selected_polyline)
                     selected_polyline = e
-                }).addTo(map);
+                }).bindPopup(act_toHTMLString(content[i])
+                ).addTo(map);
 
             }
         }
@@ -82,17 +83,32 @@ function display_activities(content){
     }
 }
 
-function click_poly(e, previous){
+function onclick_poly(e, previous){
     var layer = e.target
     layer.setStyle({
-        weight: 4,
+        weight: 8,
         color: 'red'
     })
     if (previous){
-        console.log(e)
-        console.log(previous)
-        previous.target.resetStyle()
+        previous.target.setStyle({
+        weight: 4,
+        color: 'blue'
+    })
     }
+}
+
+function act_toHTMLString(activity){
+    console.log(activity)
+    moving_time = new Date(1000 * activity['moving_time']).toISOString().substr(11, 8) 
+    distance = Math.round(activity['distance'] / 100).toFixed(1)
+    str = activity['name'] + '<br/>'
+    str += 'Date : ' + activity['start_date_local'].substring(0,10) + '<br/>'
+    str += 'Distance : ' + distance + 'km <br/>'
+    str += 'Duration : ' + moving_time + '<br/>'
+    if (activity['type'] == 'Run'){
+        str += 'Elevation gain : ' + activity['total_elevation_gain'] + 'D+'
+    }
+    return str
 }
 
 // list of activities
