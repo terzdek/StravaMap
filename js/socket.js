@@ -2,7 +2,7 @@
 function OauthRedirect() {
     params = {
         'client_id':'32029',
-        'redirect':'http://localhost/StravaMap', 
+        'redirect':location.protocol + '//' + location.host + location.pathname,
         'approval_prompt':'auto',
         'response_type':'code',
         'scope':"read,activity:read_all,profile:read_all,read_all"
@@ -76,7 +76,6 @@ function get_args(){
 
 // get the needed cookie 
 function get_cookie(cname){
-    console.log("Retrieve cookie " + cname)
     var name = cname + "=";
     //var decodedCookie = decodeURIComponent(document.cookie)
     var ca = document.cookie.split(';')
@@ -94,7 +93,6 @@ function get_cookie(cname){
 
 function set_cookie(cname, cvalue, exdays) {
     if (!(exdays instanceof Date)){
-        console.log(exdays)
         var d = new Date()
         d.setTime(d.getTime() + (exdays*24*60*60*1000))
         var exdays = d.toUTCString()
