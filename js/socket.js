@@ -24,7 +24,7 @@ function get_api(type, params, callback=function(json){},fullurl='https://www.st
         url += k +"=" + v + "&"
     })
     console.log("GET " + url)
-    req.open('GET', url, true);
+        req.open('GET', url, true);
 
     req.onreadystatechange = function() {
         if(req.readyState === 4){     

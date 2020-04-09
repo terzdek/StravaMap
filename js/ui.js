@@ -9,7 +9,7 @@ function print_athlete_infos(content){
 
 function show_activities_on_list(content) {
     txt = "<table class='table'>"
-    txt += "<thead>"
+    txt += "<thead class='sticky_thead'>"
     txt += "<tr>"
     txt += "<th scope='col'>Name</th>"
     txt += "<th scope='col'>Sport</th>"
@@ -22,11 +22,10 @@ function show_activities_on_list(content) {
     txt += "</thead>"
     if (content != ""){
         content = JSON.parse(content)
-        console.log(content)
+        txt += "<tbody>"
         for (var i = 0; i < content.length; i++) {
             var trigger_correspond_layer = "click_on_layer(" + i + ")"
 
-            txt += "<tbody>"
             txt += "<tr>"
             txt += "<th scope='row'><a href=javascript:" + trigger_correspond_layer + ";>" + content[i].name + "</a></th>"
             txt += "<td>" + content[i].type + "</td>"
@@ -36,11 +35,12 @@ function show_activities_on_list(content) {
             txt += "<td>" + distance + "km</td>"
             elapsed_time = new Date(content[i].moving_time * 1000).toISOString().substr(11, 8);
             txt += "<td>" + elapsed_time + "</td>"
-            txt += "<td>" + content[i].average_speed + "</td>"
+            txt += "<td>" + Math.round((content[i].average_speed * 3.6 + Number.EPSILON) * 100) / 100 + "km/h</td>"
             txt += "<td>" + content[i].kudos_count + "</td>"
             txt += "</tr>"
-            txt += "</tbody>"
         }
+        txt += "</tbody>"
+
     }
     txt += "</table>"
 
@@ -58,8 +58,8 @@ function remove_loader() {
 
 function activity_toHTMLString(activity){
     moving_time = new Date(1000 * activity['moving_time']).toISOString().substr(11, 8)
-    distance = Math.round(activity['distance'] / 100).toFixed(1)
-    str = activity['name'] + '<br/>'
+    distance = Math.round((activity.distance / 1000 + Number.EPSILON) * 100) / 100
+    str = '<a href="https://www.strava.com/activities/' + activity['id'] + '" target="_blank">' + activity['name'] + '</a><br/>'
     str += 'Date : ' + activity['start_date_local'].substring(0,10) + '<br/>'
     str += 'Distance : ' + distance + 'km <br/>'
     str += 'Duration : ' + moving_time + '<br/>'

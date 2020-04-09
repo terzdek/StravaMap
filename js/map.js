@@ -59,9 +59,9 @@ function unique_color_for_sport(sport_name){
         case 'Ride':
             return 'blue'
         case 'AlpineSki':
-            return 'grey'
+            return 'green'
         case 'NordicSki':
-            return 'grey'
+            return 'green'
         case 'BackcountrySki':
             return 'green'
         case 'Swim':
@@ -85,7 +85,6 @@ function onclick_poly(e, previous){
 function get_layer_from_id(id){
     for (const [key, layer] of Object.entries(map_obj._layers)) {
         if (layer.options.id == id){
-            console.log(layer)
             return layer
         }
     }

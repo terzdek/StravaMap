@@ -10,7 +10,8 @@ function delete_cookies(){
 // remove cookies and reload
 function disconnect(){
     delete_cookies()
-    window.location.assign('http://localhost/StravaMap')
+    localStorage.removeItem("activities");
+    window.location.assign(location.protocol + '//' + location.host + location.pathname)
 }
 
 // Get token with and save it

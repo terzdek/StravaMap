@@ -22,3 +22,16 @@ html, body, #mapid{
 	0% { transform: rotate(0deg); }
 	100% { transform: rotate(360deg); }
 }
+
+.sticky_thead{
+	overflow-y: auto;
+	position: sticky;
+	top: 40px;
+	background: white;
+}
+.sidebar-header{
+	position: sticky;
+	top: 0;
+}
+
+

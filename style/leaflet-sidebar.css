@@ -144,7 +144,7 @@
   text-align: center;
   cursor: pointer; }
 .sidebar-left .sidebar-extend {
-  right: 0; }
+  right: 10px; }
 .sidebar-right .sidebar-extend {
   left: 0; }
 

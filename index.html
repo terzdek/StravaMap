@@ -4,11 +4,11 @@
     <meta charset="utf-8">
     <title>My Strava Map</title>
     <meta name="Description" content="Strava API Map Visualization">
-    <link rel="stylesheet" href="style/style.css">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin=""/>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <link rel="stylesheet" href="style/leaflet-sidebar.css" />
+    <link rel="stylesheet" href="style/style.css">
 </head>
 
 <body>
@@ -28,15 +28,14 @@
         <div class="sidebar-pane" id="home">
             <h1 class="sidebar-header">
                 Strava Map
-                <span class="sidebar-extend"><i class="fa fa-caret-left"></i> <i class="fa fa-caret-right"></i></span>
+                <span class="sidebar-extend"><i class="fa fa-caret-right"></i></span>
             </h1>
             <button type="button" class="btn btn-outline-primary" id="btnAuthenticate">Connect to Strava App</button>
-            <div id="profile"></div>
             <div id="activity_list"></div>
         </div>
 
         <div class="sidebar-pane" id="settings">
-            <h1 class="sidebar-header">Settings<span class="sidebar-extend"><i class="fa fa-caret-left"></i> <i class="fa fa-caret-right"></i></span></h1>
+            <h1 class="sidebar-header">Settings<span class="sidebar-extend"><i class="fa fa-caret-right"></i></span></h1>
             <button type="button" class="btn btn-outline-primary" id="btnDisconnect">Disconnect</button>
         </div>
     </div>
