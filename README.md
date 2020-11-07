@@ -9,6 +9,10 @@ No personal information is stored. Only a cookie to avoid reconnection to Strava
 ## To Do List
 * Sort by column
 * Filters :
-    * Add filter depending activity
     * Allow user to choose a time period
     * Allow user to select a zone and have the list of activities there
+* Color in checkbox explaining what is what
+* Checkboxes in columns
+* Number in the list (updated when filtered)
+* Fix cookie size saving activities
+* Reformat code with better unique action functions

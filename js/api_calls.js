@@ -39,13 +39,6 @@ function load_activities(id, map){
     params = {'before':now, 'after':1264365861, 'page':page_nb, 'per_page':per_page, 'access_token': access_token}
     add_loader()
 
-    display_act = function(json){
-        show_activities_on_map(json)
-        show_activities_on_list(json)
-        set_cookie("activities", json, 100)
-        remove_loader()
-    }
-
     load_several_pages = async function(json){
         if (json != ""){
             concat_localStorage('activities', json)
@@ -55,7 +48,7 @@ function load_activities(id, map){
                 params['per_page'] = per_page
                 get_api("athlete/activities", params, load_several_pages)
             } else{
-                display_act(localStorage.getItem('activities'))
+                main_callback(localStorage.getItem('activities'))
             }
         }
 
@@ -65,6 +58,6 @@ function load_activities(id, map){
     if (local_activities == null){
         get_api("athlete/activities", params, load_several_pages)
     }else{
-        display_act(local_activities)
+        main_callback(local_activities)
     }
 }

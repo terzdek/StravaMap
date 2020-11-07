@@ -45,6 +45,25 @@ function show_activities_on_list(content) {
     txt += "</table>"
 
     $('#activity_list').html(txt)
+
+}
+
+function activity_type_checkbox_action(checkbox_element){
+    if (checkbox_element.checked) {
+        show_type(checkbox_element.value)
+    } else {
+        hide_type(checkbox_element.value)
+    }
+}
+
+function show_checkboxes_activity_type(){
+    activity_types = get_activities_types()
+    txt = ""
+    for (var i = 0; i < activity_types.length; i++) {
+        txt += "<input type='checkbox' id='" + activity_types[i] + "' name='" + activity_types[i] + "' value='" + activity_types[i] + "' onchange='activity_type_checkbox_action(this)' checked>\n"
+        txt +="<label for='" + activity_types[i] + "'>" + activity_types[i] + "</label><br>\n"
+    }
+    $('#activity_chooser').html(txt)
 }
 
 function add_loader() {
@@ -70,40 +89,11 @@ function activity_toHTMLString(activity){
 }
 
 // What to do onload of page
-function init(){
+function init_ui(){
 
     //Assign function to the button
     $("#btnAuthenticate").on('click', (e) => {
         OauthRedirect()
     })
 
-    map_obj = init_map()
-    var flag_access_granted = 0
-    var access_token = get_cookie('access_token')
-    
-    // If no cookie exist
-    if (access_token == ""){
-        console.log("no cookie access token")
-        var args = get_args()
-        console.log(args)
-        if ('code' in args){
-            get_token(args['code'])
-            flag_access_granted = 1
-        }else if('access_token' in args){
-            console.log('We have the token :' + args)
-        }else{
-            console.log("Please connect")
-        }
-    }else{
-        flag_access_granted = 1
-    }
-
-
-    if (flag_access_granted == 1){
-        load_content_from_token(map_obj)
-    }
-
-
 }
-
-init()

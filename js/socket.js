@@ -2,7 +2,8 @@
 function OauthRedirect() {
     params = {
         'client_id':'32029',
-        'redirect':location.protocol + '//' + location.host + location.pathname,
+        //'redirect':location.protocol + '//' + location.host + location.pathname,
+        'redirect' : "http://localhost/StravaMap",
         'approval_prompt':'auto',
         'response_type':'code',
         'scope':"read,activity:read_all,profile:read_all,read_all"
