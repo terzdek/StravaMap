@@ -29,9 +29,10 @@ html, body, #mapid{
 	top: 40px;
 	background: white;
 }
+
 .sidebar-header{
 	position: sticky;
 	top: 0;
+	z-index: 1;
 }
-
 

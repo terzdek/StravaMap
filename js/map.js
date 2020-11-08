@@ -14,18 +14,31 @@ function init_map(){
     return map_obj
 }
 
-function remove_layer(id){
-    map_obj.removeLayer(get_layer_from_id(id))
+function hide_layer_by_id(id){
+    layer = get_layer_from_id(id)
+    if (layer == null){
+        console.log("Unable to hide layer " + id + ", layer not found. Must be a activity without GPS")
+    } else{
+        map_obj.removeLayer(layer)
+    }
 }
 
-function add_layer(layer){
+function show_layer_by_id(id){
+    layer = get_layer_from_id(id)
+    if (layer == null){
+        console.log("Unable to show layer " + id + ", layer not found. Must be a activity without GPS")
+    } else{
+        layer.addTo(map_obj)
+    }
+}
+
+function show_layer(layer){
     layer.addTo(map_obj)
 }
-
 function show_activities_on_map(){
     // show polylines
     for (var i = 0; i < g_polyline_list.length; i++) {
-        add_layer(g_polyline_list[i])
+        show_layer(g_polyline_list[i])
     }
     // fit the map window to contain all the activities
     map_obj.fitBounds(get_coord_bound_list(g_polyline_list))
@@ -68,7 +81,7 @@ function onclick_poly(e, previous){
 }
 
 function get_layer_from_id(id){
-    for (const [key, layer] of Object.entries(map_obj._layers)) {
+    for (const [key, layer] of Object.entries(g_polyline_list)) {
         if (layer.options.id == id){
             return layer
         }

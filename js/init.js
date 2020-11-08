@@ -5,7 +5,7 @@ function init(){
 
     map_obj = init_map()
     g_polyline_list = []
-    g_coordinates_list = []
+    g_activity_list = []
 
     var flag_access_granted = 0
     var access_token = get_cookie('access_token')
