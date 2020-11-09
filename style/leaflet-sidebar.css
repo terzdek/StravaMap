@@ -100,7 +100,7 @@
   left: 0;
   right: 0;
   box-sizing: border-box;
-  padding: 0px 0px; 
+  padding: 10px 20px; 
 }
   .sidebar-pane.active {
     display: block; }
@@ -117,7 +117,7 @@
 .sidebar-header {
   margin: -10px -20px 0;
   height: 40px;
-  padding: 0 0px;
+  padding: 0 20px;
   line-height: 40px;
   font-size: 14.4pt;
   color: #fff;
