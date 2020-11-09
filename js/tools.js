@@ -77,15 +77,26 @@ function get_coord_bound_list(poly_list){
     return coordinates_list
 }
 
-function get_activities_types(){
+function get_activities_types_and_count(){
     var activity_type = []
     for (var i = 0; i < g_activity_list.length; i++) {
-        current_type = g_activity_list[i]["type"]
-        if (!activity_type.includes(current_type)){
-            activity_type.push(current_type)
-        }
+        activity_type.push(g_activity_list[i]["type"])
     }
-    return activity_type
+    // count elements of each type
+    var items = {};
+    for (var i = 0; i < activity_type.length; i++) {
+        items[activity_type[i]] = 1 + (items[activity_type[i]] || 0);
+    }
+
+    // sort elements by count
+    items = Object.keys(items).map(function(key) {
+        return [key, items[key]];
+    });
+    items.sort(function(first, second) {
+        return second[1] - first[1];
+    });
+
+    return items
 }
 
 function get_activities_id_by_type(type){
@@ -113,4 +124,8 @@ function show_type(type){
         show_layer_by_id(ids_to_show[i])
         show_list_line(ids_to_show[i])
     }
+}
+
+function count_activities(){
+    return g_activity_list.length
 }

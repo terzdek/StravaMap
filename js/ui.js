@@ -4,12 +4,16 @@
 
 ////// SIDEBAR 
 function print_athlete_infos(content){
-    $('#home>.sidebar-header').append("of " + content["firstname"] + " " + content["lastname"])
+    $('#home>.sidebar-header>p').append(" - " + content["firstname"] + " " + content["lastname"])
 }
 
 //// LIST 
 
 function show_activities_on_list() {
+    // add count in header of the sidebar before
+    $('#home>.sidebar-header>p').append(" (" + count_activities() + " activities)")
+
+
     txt = "<table class='table'>"
     txt += "<thead class='sticky_thead'>"
     txt += "<tr>"
@@ -63,16 +67,18 @@ function activity_type_checkbox_action(checkbox_element){
 }
 
 function show_checkboxes_activity_type(){
-    activity_types = get_activities_types()
+    activity_types = get_activities_types_and_count()
     txt = ""
     for (var i = 0; i < activity_types.length; i++) {
+        act = activity_types[i][0]
+        act_count = activity_types[i][1]
         if (i % 2 == 0){
             txt += "<div class='row'>"
         }
         txt += "<div class='col'>"
-        txt += "<label for='" + activity_types[i] + "' class='checkbox-inline'>"
-        txt += "<input type='checkbox' id='" + activity_types[i] + "' name='" + activity_types[i] + "' value='" + activity_types[i] + "' onchange='activity_type_checkbox_action(this)' checked>\n"
-        txt += activity_types[i] + "</label>\n"
+        txt += "<label for='" + act + "' class='checkbox-inline' style='color:"+ unique_color_for_sport(act) +"'>"
+        txt += "<input type='checkbox' id='" + act + "' name='" + act + "' value='" + act + "' onchange='activity_type_checkbox_action(this)' checked>\n"
+        txt += act + " ("+ act_count +")</label>\n"
         txt += "</div>\n"
         if (i % 2 == 1){
             txt += "</div>\n"
@@ -94,6 +100,55 @@ function add_loader() {
 function remove_loader() {
     $("#home>.loader").remove()
 }
+
+// general ui
+function unique_color_for_sport(sport_name){
+    switch (sport_name) {
+        case 'Run':
+            return 'red'
+        case 'Hike':
+        case 'Snowshoe':
+        case 'Walk':
+            return 'orange'
+        case 'Ride':
+        case 'EBikeRide':
+            return 'blue'
+        case 'VirtualRide':
+        case 'VirtualRun':
+            return 'cyan'
+        case 'AlpineSki':
+        case 'BackcountrySki':
+        case 'NordicSki':
+        case 'Windsurf':
+        case 'Snowboard':
+            return 'purple'
+        case 'Swim':
+        case 'Kayaking':
+        case 'Kitesurf':
+        case 'Sail':
+        case 'Rowing':
+        case 'Canoeing':
+            return 'green'
+        case 'Crossfit':
+        case 'Workout':
+        case 'Wheelchair':
+        case 'Handcycle':
+        case 'Yoga':
+        case 'WeightTraining':
+        case 'Elliptical':
+        case 'Skateboard':
+        case 'IceSkate':
+        case 'RollerSki':
+        case 'RockClimbing':
+        case 'InlineSkate':
+        case 'Golf':
+        default:
+            return 'grey'
+    }
+}
+
+
+
 
 // What to do onload of page
 function init_ui(){

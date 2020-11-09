@@ -13,6 +13,5 @@ No personal information is stored. Only a cookie to avoid reconnection to Strava
 * Filters :
     * Allow user to choose a time period
     * Allow user to select a zone and have the list of activities there
-* Color in checkbox explaining what is what
-* Number in the list (updated when filtered)
 * Fix cookie size saving activities
+* Make that error in part of code does not block the rest if the rest can compute

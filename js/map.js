@@ -44,31 +44,6 @@ function show_activities_on_map(){
     map_obj.fitBounds(get_coord_bound_list(g_polyline_list))
 }
 
-function unique_color_for_sport(sport_name){
-    switch (sport_name) {
-        case 'Run':
-            return 'red'
-        case 'Snowshoe':
-            return 'red'
-        case 'Hike':
-            return 'red'
-        case 'Walk':
-            return 'red'
-        case 'Ride':
-            return 'blue'
-        case 'AlpineSki':
-            return 'green'
-        case 'NordicSki':
-            return 'green'
-        case 'BackcountrySki':
-            return 'green'
-        case 'Swim':
-            return 'yellow'
-        default:
-            return 'grey'
-    }
-}
-
 function onclick_poly(e, previous){
     // Thicken the clicked poly
     if (previous){
