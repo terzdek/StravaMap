@@ -64,3 +64,8 @@ html, body, #mapid{
 #filters_content{
 	display: none;
 }
+
+
+.table td, .table th {
+	padding: .5rem;
+}
