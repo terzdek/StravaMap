@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin=""/>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <link rel="stylesheet" href="style/leaflet-sidebar.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" />
     <link rel="stylesheet" href="style/style.css">
 </head>
 
@@ -31,11 +32,16 @@
                 <span class="sidebar-extend"><i class="fa fa-caret-right"></i></span>
             </h1>
             <button type="button" class="btn btn-outline-primary" id="btnAuthenticate">Connect to Strava App</button>
-            <div id="activity_chooser">
 
+            <div id="filters">
+                <div class="input-group input-daterange">
+                    <div class="vertical-txt">Date from </div>  
+                    <input type="text" class="form-control input-sm" id="date_begin" onchange="filter_activities_by_date()">
+                    <div class="input-group-addon vertical-txt"> to </div>
+                    <input type="text" class="form-control input-sm" id="date_end" onchange="filter_activities_by_date()">
+                </div>
+                <div id="activity_chooser"></div>
             </div>
-
-
             <div id="activity_list"></div>
         </div>
 
@@ -48,7 +54,7 @@
 <!-- Map container -->
 <div id="mapid"></div>
 
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
@@ -56,6 +62,7 @@
         crossorigin=""></script>
 <script type="text/javascript" src="https://rawgit.com/jieter/Leaflet.encoded/master/Polyline.encoded.js"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 <script src="js/import/leaflet-sidebar.js"></script>
 <script src="js/tools.js" type="text/javascript"></script>
 <script src="js/socket.js" type="text/javascript"></script>

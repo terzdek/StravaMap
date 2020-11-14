@@ -4,59 +4,75 @@
 
 ////// SIDEBAR 
 function print_athlete_infos(content){
-    $('#home>.sidebar-header>p').append(" - " + content["firstname"] + " " + content["lastname"])
+    $('#home>.sidebar-header>p').append(" - " + content["firstname"] + " " + content["lastname"] + " (<span id='total_act_nb'>" + 0 + "</span> activities)")
 }
 
 //// LIST 
 
-function show_activities_on_list() {
+function update_total_activities_nb(){
     // add count in header of the sidebar before
-    $('#home>.sidebar-header>p').append(" (" + count_activities() + " activities)")
+    $('#total_act_nb').html(count_shown_activities())
+}
 
+function show_activities_on_list() {
+    update_total_activities_nb()
 
-    txt = "<table class='table'>"
+    columns_to_add = ["Name", "Sport", "Date", "Distance", "Moving Time", "Average Speed", "Kudos Received"]
+
+    txt = "<table class='table' id='table_sortable'>"
     txt += "<thead class='sticky_thead'>"
     txt += "<tr>"
-    txt += "<th scope='col'>Name</th>"
-    txt += "<th scope='col'>Sport</th>"
-    txt += "<th scope='col'>Date</th>"
-    txt += "<th scope='col'>Distance</th>"
-    txt += "<th scope='col'>Moving Time</th>"
-    txt += "<th scope='col'>Average Speed</th>"
-    txt += "<th scope='col'>Kudos Received</th>"
+    for (var i = 0; i < columns_to_add.length; i++) {
+        txt += "<th scope='col' onclick='sort_table_by_col("+i+")'>" + columns_to_add[i] + "</th>"
+    }
     txt += "</tr>"
     txt += "</thead>"
     txt += "<tbody>"
-    for (var i = 0; i < g_activity_list.length; i++) {
-        txt += "<tr id='" + "list_act_" + i + "'>"
-        txt += "<th scope='row'><a href=javascript:" + "click_on_layer(" + i + ")" + ";>" + g_activity_list[i].name + "</a></th>"
-        txt += "<td>" + g_activity_list[i].type + "</td>"
-        date = new Date(g_activity_list[i].start_date).toLocaleDateString('fr-FR')
-        txt += "<td>" + date + "</td>"
-        distance = Math.round((g_activity_list[i].distance / 1000 + Number.EPSILON) * 100) / 100
-        txt += "<td>" + distance + "km</td>"
-        elapsed_time = new Date(g_activity_list[i].moving_time * 1000).toISOString().substr(11, 8);
-        txt += "<td>" + elapsed_time + "</td>"
-        txt += "<td>" + Math.round((g_activity_list[i].average_speed * 3.6 + Number.EPSILON) * 100) / 100 + "km/h</td>"
-        txt += "<td>" + g_activity_list[i].kudos_count + "</td>"
-        txt += "</tr>"
-    }
     txt += "</tbody>"
     txt += "</table>"
 
     $('#activity_list').html(txt)
 
+    for (var i = 0; i < g_activity_list.length; i++) {
+        add_list_row('#activity_list>table>tbody', g_activity_list[i], i)
+    }
 }
 
 function hide_list_line(id){
-    $("#list_act_"+ id).css("display","none")
+    $("#list_act_"+ id).hide();
 }
 
 function show_list_line(id){
-    $("#list_act_"+ id).css("display","")
+    $("#list_act_"+ id).show();
 }
 
-//// CHECKBOXES
+function add_list_row(table_class, activity, id){
+        date = new Date(activity.start_date).toLocaleDateString('fr-FR')
+        distance = Math.round((activity.distance / 1000 + Number.EPSILON) * 100) / 100
+        elapsed_time = new Date(activity.moving_time * 1000).toISOString().substr(11, 8)
+        average_speed = Math.round((activity.average_speed * 3.6 + Number.EPSILON) * 100) / 100
+        row_txt = "<tr id='" + "list_act_" + id + "'>"
+        row_txt += "<td scope='row'><a href=javascript:" + "click_on_layer(" + id + ")" + ";>" + activity.name + "</a></td>"
+        row_txt += "<td>" + activity.type + "</td>"
+        row_txt += "<td>" + date + "</td>"
+        row_txt += "<td>" + distance + "km</td>"
+        row_txt += "<td>" + elapsed_time + "</td>"
+        row_txt += "<td>" + average_speed + "km/h</td>"
+        row_txt += "<td>" + activity.kudos_count + "</td>"
+        row_txt += "</tr>"
+        $(table_class).append(row_txt)
+}
+
+//// FILTERS
+
+function show_filters(){
+    show_datepicker()
+    show_checkboxes_activity_type()
+}
+
+function show_datepicker() {
+    $("#filters").show();
+}
 
 function activity_type_checkbox_action(checkbox_element){
     if (checkbox_element.checked) {
@@ -64,7 +80,10 @@ function activity_type_checkbox_action(checkbox_element){
     } else {
         hide_type(checkbox_element.value)
     }
+    update_total_activities_nb()
 }
+
+
 
 function show_checkboxes_activity_type(){
     activity_types = get_activities_types_and_count()
@@ -112,10 +131,10 @@ function unique_color_for_sport(sport_name){
             return 'orange'
         case 'Ride':
         case 'EBikeRide':
-            return 'blue'
+            return 'green'
         case 'VirtualRide':
         case 'VirtualRun':
-            return 'cyan'
+            return 'teal'
         case 'AlpineSki':
         case 'BackcountrySki':
         case 'NordicSki':
@@ -128,7 +147,7 @@ function unique_color_for_sport(sport_name){
         case 'Sail':
         case 'Rowing':
         case 'Canoeing':
-            return 'green'
+            return 'blue'
         case 'Crossfit':
         case 'Workout':
         case 'Wheelchair':
@@ -158,4 +177,14 @@ function init_ui(){
         OauthRedirect()
     })
 
+    //set datepicker to pick only years and months
+    $('.input-daterange input').each(function() {
+        $(this).datepicker({
+            format: "mm-yyyy",
+            startView: "months", 
+            minViewMode: "months",
+            autoclose: true
+        });
+        
+    });
 }

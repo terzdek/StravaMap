@@ -10,8 +10,8 @@ No personal information is stored. Only a cookie to avoid reconnection to Strava
 
 ## To Do List
 * Sort by column
-* Filters :
-    * Allow user to choose a time period
-    * Allow user to select a zone and have the list of activities there
 * Fix cookie size saving activities
 * Make that error in part of code does not block the rest if the rest can compute
+* filters in a tab to open/close
+* datepicker default value
+* remove ugly alert

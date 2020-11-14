@@ -4,8 +4,15 @@ function init(){
     init_ui()
 
     map_obj = init_map()
+    // store the polylines of the map
     g_polyline_list = []
+    // store the json associated activities, output of Strava
     g_activity_list = []
+
+    // store the ids filtered by checkboxes
+    g_filtered_checkbox_list = []
+    // store the ids filtered by datepicker
+    g_filtered_datepicker_list = []
 
     var flag_access_granted = 0
     var access_token = get_cookie('access_token')

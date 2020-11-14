@@ -5,9 +5,19 @@ function main_callback(json){
     g_activity_list = act_list
     polyline_list = get_activities_polylines()
     g_polyline_list = polyline_list
+    try {
+        show_activities_on_map()
+    }
+    catch(err) {
+        console.log("Error while showing activity on map : " + err)
+    }
+    try {
+        show_filters()
+    }
+    catch(err) {
+        console.log("Error while showing checkboxes to choose activities types : " + err)
+    }
 
-    show_activities_on_map()
-    show_checkboxes_activity_type()
     show_activities_on_list()
     remove_loader()
 }
@@ -109,23 +119,88 @@ function get_activities_id_by_type(type){
     return ids
 }
 
+function get_activities_id_out_of_daterange(date1, date2){
+    ids = []
+    for (var i = 0; i < g_activity_list.length; i++) {
+        current_date = Date.parse(g_activity_list[i].start_date_local)
+        if(current_date <= date1 || current_date >= date2){
+            ids.push(i)
+        }
+    }
+    return ids
+}
+
 function hide_type(type){
     ids_to_hide = get_activities_id_by_type(type)
     for (var i = 0; i < ids_to_hide.length; i++) {
-        hide_layer_by_id(ids_to_hide[i])
-        hide_list_line(ids_to_hide[i])
+        // if not already hidden by datepicker
+        if (!g_filtered_datepicker_list.includes(ids_to_hide[i])) {
+            hide_layer_by_id(ids_to_hide[i])
+            hide_list_line(ids_to_hide[i])
+            g_filtered_checkbox_list.push(ids_to_hide[i])
+        }
     }
 }
 
 function show_type(type){
-    console.log("Show type " + type)
     ids_to_show = get_activities_id_by_type(type)
     for (var i = 0; i < ids_to_show.length; i++) {
-        show_layer_by_id(ids_to_show[i])
-        show_list_line(ids_to_show[i])
+        // if was hidden by checkbox only
+        if (g_filtered_checkbox_list.includes(ids_to_show[i])) {
+            show_layer_by_id(ids_to_show[i])
+            show_list_line(ids_to_show[i])
+            // remove item from array
+            var index = g_filtered_checkbox_list.indexOf(ids_to_show[i]);
+            if (index !== -1) {
+              g_filtered_checkbox_list.splice(index, 1)
+            }
+        }
     }
 }
 
-function count_activities(){
-    return g_activity_list.length
+function count_shown_activities(){
+    // all activities except the filtered ones
+    return g_activity_list.length - g_filtered_checkbox_list.length - g_filtered_datepicker_list.length
+}
+
+function sort_table_by_col(){
+    console.log("sort_table_by_col : To Be Implemented")
+}
+
+// hide all date not in range of the two dates. If one date missing, 0 or inf value is taken
+function filter_activities_by_date(){
+    date1 = $("#date_begin")[0].value 
+    date2 = $("#date_end")[0].value 
+    if(date1 == ""){
+        date_begin = Date.parse("1970-01-01")
+    } else{
+        date_begin = Date.parse(date1.substr(3) + "-" + date1.substr(0,2) + "-01")
+    }
+    if(date2 == ""){
+        date_end = Date.parse("2999-01-01")
+    } else{
+        date_end = Date.parse(date2.substr(3) + "-" + date2.substr(0,2) + "-31")
+    }
+    if (date_begin > date_end){
+        alert("Start date > End date")
+        return
+    }
+    //show previous hidden ids by datepicker (to avoid showing the ones hidden by checkbox)
+    for (var i = 0; i < g_filtered_datepicker_list.length; i++) {
+        show_layer_by_id(g_filtered_datepicker_list[i])
+        show_list_line(g_filtered_datepicker_list[i])
+    }
+    g_filtered_datepicker_list = []
+
+    // hide new ones
+    ids_to_hide = get_activities_id_out_of_daterange(date_begin, date_end)
+
+    for (var i = 0; i < ids_to_hide.length; i++) {
+        hide_layer_by_id(ids_to_hide[i])
+        hide_list_line(ids_to_hide[i])
+        g_filtered_datepicker_list.push(ids_to_hide[i])
+    }
+
+    update_total_activities_nb()
+
 }
