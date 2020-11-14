@@ -66,12 +66,12 @@ function add_list_row(table_class, activity, id){
 //// FILTERS
 
 function show_filters(){
-    show_datepicker()
+    $("#filters").show()
     show_checkboxes_activity_type()
 }
 
-function show_datepicker() {
-    $("#filters").show();
+function expand_collapse_filters(){
+    $("#filters_content").slideToggle("slow");
 }
 
 function activity_type_checkbox_action(checkbox_element){

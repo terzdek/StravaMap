@@ -34,13 +34,16 @@
             <button type="button" class="btn btn-outline-primary" id="btnAuthenticate">Connect to Strava App</button>
 
             <div id="filters">
-                <div class="input-group input-daterange">
-                    <div class="vertical-txt">Date from </div>  
-                    <input type="text" class="form-control input-sm" id="date_begin" onchange="filter_activities_by_date()">
-                    <div class="input-group-addon vertical-txt"> to </div>
-                    <input type="text" class="form-control input-sm" id="date_end" onchange="filter_activities_by_date()">
+                <button class="btn btn-primary" onclick="expand_collapse_filters()">Activities filters</button>
+                <div id="filters_content">
+                    <div class="input-group input-daterange">
+                        <div class="vertical-txt">Date from </div>  
+                        <input type="text" class="form-control input-sm" id="date_begin" onchange="filter_activities_by_date()">
+                        <div class="input-group-addon vertical-txt"> to </div>
+                        <input type="text" class="form-control input-sm" id="date_end" onchange="filter_activities_by_date()">
+                    </div>
+                    <div id="activity_chooser"></div>
                 </div>
-                <div id="activity_chooser"></div>
             </div>
             <div id="activity_list"></div>
         </div>

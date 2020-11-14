@@ -12,6 +12,3 @@ No personal information is stored. Only a cookie to avoid reconnection to Strava
 * Sort by column
 * Fix cookie size saving activities
 * Make that error in part of code does not block the rest if the rest can compute
-* filters in a tab to open/close
-* datepicker default value
-* remove ugly alert

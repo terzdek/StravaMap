@@ -178,13 +178,14 @@ function filter_activities_by_date(){
     }
     if(date2 == ""){
         date_end = Date.parse("2999-01-01")
-    } else{
-        date_end = Date.parse(date2.substr(3) + "-" + date2.substr(0,2) + "-31")
+    } else {
+        date_end = Date.parse(date2.substr(3) + "-" + (parseInt(date2.substr(0,2)) + 1) + "-01")
     }
     if (date_begin > date_end){
-        alert("Start date > End date")
+        $("#date_end")[0].setCustomValidity("End date is before start date")
         return
     }
+
     //show previous hidden ids by datepicker (to avoid showing the ones hidden by checkbox)
     for (var i = 0; i < g_filtered_datepicker_list.length; i++) {
         show_layer_by_id(g_filtered_datepicker_list[i])

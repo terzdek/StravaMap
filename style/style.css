@@ -60,3 +60,7 @@ html, body, #mapid{
 #filters{
 	display: none;
 }
+
+#filters_content{
+	display: none;
+}
