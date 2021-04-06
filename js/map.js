@@ -7,7 +7,7 @@ function init_map(){
     maxZoom: 18,
     zoomOffset: -1,
     id: 'mapbox/outdoors-v11',
-    accessToken: 'pk.eyJ1IjoiYWxhcnR5IiwiYSI6ImNqcnJuNjVrOTAzOHIzeW5wa3hjeThkbnkifQ.BErXSZMg3xOUBFDB5RvQ7w'
+    accessToken: 'pk.eyJ1IjoiYWxhcnR5ODkiLCJhIjoiY2tuNWN1ZDh2MDJ5bDJ2bjFoOXl2NXFlMyJ9.29nOGkq8SrTmR_MTyJvK9Q'
     }).addTo(map_obj);
     var sidebar = L.control.sidebar('sidebar').addTo(map_obj);
     sidebar.open("home")
